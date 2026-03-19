@@ -1,197 +1,168 @@
 # Retail Inventory Data Analysis
 
-![SQL](https://img.shields.io/badge/SQL-Data%20Analysis-blue)
-![Database](https://img.shields.io/badge/Database-Relational-orange)
-![Project](https://img.shields.io/badge/Project-Portfolio-green)
-![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
-
-## Project Overview / Descripción del Proyecto
-
-This project analyzes inventory inconsistencies between two retail inventory systems and identifies data replication issues across item-location records.
-
-Este proyecto analiza inconsistencias de inventario entre dos sistemas de inventario retail e identifica problemas de replicación de datos entre registros de producto y ubicación.
-
-The analysis classifies records into different scenarios such as:
-
-El análisis clasifica los registros en diferentes escenarios como:
-
-- Correctly replicated inventory records
-- Pending data pipeline processing
-- Missing staging records
-- Replication errors
-- Store closure scenarios
-- Status inconsistencies between systems
+![SQL](https://img.shields.io/badge/SQL-Queries-blue?logo=postgresql&logoColor=white)
+![Excel](https://img.shields.io/badge/Excel-Data%20Validation-green?logo=microsoft-excel&logoColor=white)
+![Database](https://img.shields.io/badge/Database-Relational-orange?logo=databricks&logoColor=white)
+![Project](https://img.shields.io/badge/Project-Portfolio-blueviolet?logo=github&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen?logo=checkmarx&logoColor=white)
 
 ---
 
-# Business Problem / Problema de Negocio
+## 📊 Project Overview / Descripción del Proyecto
 
-Retail inventory systems often synchronize product availability across multiple locations. When data replication pipelines fail or become inconsistent, this can lead to:
+This project analyzes inventory inconsistencies between two retail systems and identifies data replication issues across item-location records.
 
-Los sistemas de inventario retail sincronizan productos entre múltiples ubicaciones. Cuando fallan los pipelines de replicación de datos pueden ocurrir problemas como:
+Este proyecto analiza inconsistencias de inventario entre dos sistemas retail e identifica problemas de replicación de datos entre producto y ubicación.
 
-- Missing product availability
-- Incorrect inventory status
-- Data inconsistencies between systems
-- Failed data replication processes
+The analysis classifies records into different operational scenarios based on data conditions.
 
-This project simulates a real-world investigation of such issues using SQL queries and scenario classification logic.
+El análisis clasifica los registros en diferentes escenarios operativos según su condición en los sistemas.
 
-Este proyecto simula una investigación real de estos problemas utilizando consultas SQL y lógica de clasificación de escenarios.
+Initial data validation and exploratory review were performed using Excel before executing SQL analysis.
 
----
-
-# Project Structure / Estructura del Proyecto
-
+La validación inicial y el análisis exploratorio se realizaron en Excel antes de ejecutar los scripts SQL.
 
 ---
 
-# SQL Scripts Description / Descripción de Scripts
+## 💼 Business Problem / Problema de Negocio
 
-## 1️⃣ Data Exploration
+Retail systems rely on accurate data replication between platforms. When failures occur, they can cause:
 
-Purpose:
+Los sistemas retail dependen de la correcta replicación de datos. Cuando esto falla, puede provocar:
 
-Explores the dataset before running the analysis.
+- Missing product availability  
+- Incorrect inventory status  
+- Data inconsistencies  
+- Failed replication processes  
 
-Propósito:
+This project simulates a real-world data troubleshooting scenario.
 
-Explorar los datos antes de ejecutar el análisis de escenarios.
-
-Main tasks:
-
-- Identify records pending analysis
-- Analyze process status distribution
-- Review existing error comments
-- Analyze item-location relationships
+Este proyecto simula un caso real de análisis y solución de problemas de datos.
 
 ---
 
-## 2️⃣ Data Validation
+## 📂 Project Structure
 
-Purpose:
+retail-inventory-data-analysis
 
-Allows inserting sample records to test different scenarios.
+│
 
-Propósito:
+├── README.md
 
-Permite insertar registros de prueba para validar distintos escenarios de análisis.
+│
 
----
+└── sql_queries
 
-## 3️⃣ Inventory Scenario Classification
+│
 
-This is the main script of the project.
+├── 01_data_exploration.sql
 
-Este es el script principal del proyecto.
+├── 02_data_validation.sql
 
-The script classifies records into different operational scenarios including:
+├── 03_inventory_analysis.sql
 
-El script clasifica los registros en distintos escenarios operativos como:
-
-- Correct replication configuration
-- Pending pipeline processing
-- Closed store locations
-- Missing staging records
-- Data replication errors
-- Status inconsistencies between inventory systems
-
-The script uses:
-
-El script utiliza:
-
-- Complex JOINs
-- Conditional classification logic
-- Update operations for scenario labeling
-- Performance hints
+└── 04_query_optimization.sql
 
 ---
 
-## 4️⃣ Query Optimization / Data Pipeline Recovery
+## ⚙️ SQL Scripts Description / Descripción de Scripts
 
-Purpose:
-
-Identify and reset records that failed during the replication pipeline.
-
-Propósito:
-
-Identificar registros con error en el pipeline y reiniciarlos para reprocesamiento.
+### 1️⃣ Data Exploration
+Explores records before analysis.  
+Explora los datos antes del análisis.
 
 ---
 
-# Skills Demonstrated / Habilidades Demostradas
-
-SQL skills demonstrated in this project:
-
-Habilidades SQL demostradas en este proyecto:
-
-- Data exploration
-- Data validation
-- Complex SQL joins
-- Data pipeline troubleshooting
-- Scenario-based data classification
-- Query optimization
-- Data quality analysis
-- ETL pipeline debugging
+### 2️⃣ Data Validation
+Inserts test records to validate scenarios.  
+Inserta datos para validar escenarios.
 
 ---
 
-# Technologies Used / Tecnologías Utilizadas
+### 3️⃣ Inventory Scenario Classification (MAIN SCRIPT)
 
-- SQL
-- Relational Databases
-- Data Analysis
-- Data Pipeline Monitoring
-- ETL Troubleshooting
+Main logic of the project.
 
----
+Script principal del proyecto.
 
-# Key Insights / Hallazgos Clave
+Classifies records into scenarios such as:
 
-During the analysis several possible data issues were identified:
+Clasifica registros en escenarios como:
 
-Durante el análisis se identificaron posibles problemas de datos:
-
-- Replication delays between inventory systems
-- Missing staging records in the data pipeline
-- Closed store locations still referenced in inventory tables
-- Replication errors causing inconsistent item availability
-- Status mismatches between legacy and current inventory systems
-
-This type of analysis helps data teams identify operational issues and maintain inventory accuracy.
-
-# Key Insights / Hallazgos Clave
-
-During the analysis several possible data issues were identified:
-
-Durante el análisis se identificaron posibles problemas de datos:
-
-- Replication delays between inventory systems
-- Missing staging records in the data pipeline
-- Closed store locations still referenced in inventory tables
-- Replication errors causing inconsistent item availability
-- Status mismatches between legacy and current inventory systems
-
-This type of analysis helps data teams identify operational issues and maintain inventory accuracy.
-
-# Disclaimer / Aviso
-
-This project is a **simulated case study inspired by real-world data engineering and retail inventory challenges**.
-
-Este proyecto es un **caso de estudio simulado inspirado en problemas reales de ingeniería de datos e inventarios retail**.
-
-All table names, schemas, and structures have been anonymized for educational and portfolio purposes.
-
-Todos los nombres de tablas, esquemas y estructuras han sido anonimizados para fines educativos y de portafolio.
+- Correct replication configuration  
+- Pending pipeline processing  
+- Closed store locations  
+- Missing staging data  
+- Replication errors  
+- Inactive records  
+- Missing records in legacy system  
 
 ---
 
-# Author
+### 📊 Scenario Summary (NEW)
 
-Juan Carlos Cardona  
+At the end of the analysis, a summary query provides a distribution of all classified scenarios.
+
+Al final del análisis, se incluye un query que muestra la distribución de todos los escenarios detectados.
+
+This allows quick identification of the most frequent issues in the system.
+
+Esto permite identificar rápidamente los problemas más frecuentes.
+
+---
+
+### 4️⃣ Query Optimization / Data Recovery
+
+Identifies failed records in the pipeline and resets them for reprocessing.
+
+Identifica registros con error y los reinicia para reproceso.
+
+---
+
+## 📈 Key Insights / Hallazgos Clave
+
+- Data replication issues can occur at multiple stages of the pipeline  
+- Missing staging data is a common source of inconsistency  
+- Store status impacts inventory visibility  
+- Scenario classification helps prioritize data fixes  
+- Aggregated results allow quick identification of major issues  
+
+---
+
+## 🛠 Technologies Used / Tecnologías
+
+- SQL  
+- Excel (Data Validation, Data Cleaning)  
+- Relational Databases  
+- Data Analysis  
+- ETL Troubleshooting 
+
+---
+
+## 🔮 Future Improvements / Mejoras Futuras
+
+- Build dashboard to visualize scenario distribution  
+- Automate anomaly detection  
+- Implement monitoring alerts  
+- Integrate with BI tools  
+
+---
+
+## ⚠️ Disclaimer
+
+This project is a simulated case study inspired by real-world data engineering challenges.
+
+Este proyecto es un caso simulado basado en problemas reales de ingeniería de datos.
+
+All structures and names have been anonymized.
+
+---
+
+## 👤 Author
+
+Juan Carlos Cardona
 
 Aspiring Data Scientist  
 
-GitHub: https://github.com/Juan-Carlos528
-
+GitHub: https://github.com/Juan-Carlos528 
 LinkedIn: https://linkedin.com/in/juan-carlos-cardona-alvarado
