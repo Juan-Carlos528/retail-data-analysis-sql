@@ -193,4 +193,5 @@ Juan Carlos Cardona
 Aspiring Data Scientist  
 
 GitHub: https://github.com/Juan-Carlos528
+
 LinkedIn: https://linkedin.com/in/juan-carlos-cardona-alvarado
