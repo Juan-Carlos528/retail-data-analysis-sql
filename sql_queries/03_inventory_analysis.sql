@@ -14,18 +14,18 @@
 
 DEFINE vprocess_ind = "'D'";
 
-
 -- =========================================
 -- Reset de comentarios previos
 -- Reset previous analysis comments
 -- =========================================
 
 UPDATE retail_analysis.item_location_analysis
-SET COMMENTS = NULL
-WHERE PROCESS_STATUS = &vprocess_ind;
+SET
+    comments = NULL
+WHERE
+    process_status = &vprocess_ind;
 
 COMMIT;
-
 
 
 -- =========================================
@@ -36,44 +36,32 @@ COMMIT;
 -- =========================================
 
 UPDATE /*+ parallel(8) */ retail_analysis.item_location_analysis
-SET COMMENTS = 'RIL configurado RMSv10'
-
-WHERE (ITEM_ID, LOCATION_ID) IN (
-
-SELECT
-    ilm.ITEM_ID,
-    ilm.LOCATION_ID
-
-FROM retail_analysis.item_location_analysis ilm
-
-INNER JOIN retail_master.item_location il16
-ON ilm.ITEM_ID = il16.ITEM_ID
-AND ilm.LOCATION_ID = il16.LOCATION_ID
-
-INNER JOIN legacy_retail.item_location il10
-ON ilm.ITEM_ID = il10.ITEM_ID
-AND ilm.LOCATION_ID = il10.LOCATION_ID
-
-INNER JOIN retail_master.item_location_replication ril16
-ON ilm.ITEM_ID = ril16.ITEM_ID
-AND ilm.LOCATION_ID = ril16.LOCATION_ID
-
-INNER JOIN legacy_retail.item_location_replication ril10
-ON ilm.ITEM_ID = ril10.ITEM_ID
-AND ilm.LOCATION_ID = ril10.LOCATION_ID
-
-WHERE ilm.PROCESS_STATUS = &vprocess_ind
-AND ril16.DEACTIVATION_DATE IS NULL
-AND ril10.DEACTIVATION_DATE IS NULL
-AND il16.STATUS = 'A'
-AND il10.STATUS = 'A'
-
-)
-
-AND PROCESS_STATUS = &vprocess_ind;
+SET
+    comments = 'RIL configurado RMSv10'
+WHERE
+    ( item_id, location_id ) IN (
+        SELECT
+            ilm.item_id, ilm.location_id
+        FROM
+                 retail_analysis.item_location_analysis ilm
+            INNER JOIN retail_master.item_location             il16 ON ilm.item_id = il16.item_id
+                                                           AND ilm.location_id = il16.location_id
+            INNER JOIN legacy_retail.item_location             il10 ON ilm.item_id = il10.item_id
+                                                           AND ilm.location_id = il10.location_id
+            INNER JOIN retail_master.item_location_replication ril16 ON ilm.item_id = ril16.item_id
+                                                                        AND ilm.location_id = ril16.location_id
+            INNER JOIN legacy_retail.item_location_replication ril10 ON ilm.item_id = ril10.item_id
+                                                                        AND ilm.location_id = ril10.location_id
+        WHERE
+                ilm.process_status = &vprocess_ind
+            AND ril16.deactivation_date IS NULL
+            AND ril10.deactivation_date IS NULL
+            AND il16.status = 'A'
+            AND il10.status = 'A'
+    )
+    AND process_status = &vprocess_ind;
 
 COMMIT;
-
 
 
 -- =========================================
@@ -84,35 +72,28 @@ COMMIT;
 -- =========================================
 
 UPDATE /*+ parallel(8) */ retail_analysis.item_location_analysis
-SET COMMENTS = 'Pendiente Pipeline RMSv16'
-
-WHERE (ITEM_ID, LOCATION_ID) IN (
-
-SELECT DISTINCT
-ilm.ITEM_ID,
-ilm.LOCATION_ID
-
-FROM retail_analysis.item_location_analysis ilm
-
-INNER JOIN retail_master.item_location il16
-ON ilm.ITEM_ID = il16.ITEM_ID
-AND ilm.LOCATION_ID = il16.LOCATION_ID
-
-INNER JOIN retail_pipeline.replication_stage_monitor xx
-ON ilm.ITEM_ID = xx.ITEM_ID
-AND ilm.LOCATION_ID = xx.LOCATION_ID
-
-WHERE ilm.PROCESS_STATUS = &vprocess_ind
-AND COMMENTS IS NULL
-AND il16.STATUS = 'A'
-AND (xx.ATTEMPTS < 300 OR xx.ATTEMPTS IS NULL)
-
-)
-
-AND PROCESS_STATUS = &vprocess_ind;
+SET
+    comments = 'Pendiente Pipeline RMSv16'
+WHERE
+    ( item_id, location_id ) IN (
+        SELECT DISTINCT
+            ilm.item_id, ilm.location_id
+        FROM
+                 retail_analysis.item_location_analysis ilm
+            INNER JOIN retail_master.item_location               il16 ON ilm.item_id = il16.item_id
+                                                           AND ilm.location_id = il16.location_id
+            INNER JOIN retail_pipeline.replication_stage_monitor xx ON ilm.item_id = xx.item_id
+                                                                       AND ilm.location_id = xx.location_id
+        WHERE
+                ilm.process_status = &vprocess_ind
+            AND comments IS NULL
+            AND il16.status = 'A'
+            AND ( xx.attempts < 300
+                  OR xx.attempts IS NULL )
+    )
+    AND process_status = &vprocess_ind;
 
 COMMIT;
-
 
 
 -- =========================================
@@ -123,21 +104,21 @@ COMMIT;
 -- =========================================
 
 UPDATE retail_analysis.item_location_analysis
-SET COMMENTS = 'Tienda Cerrada'
-
-WHERE LOCATION_ID IN (
-
-SELECT STORE_ID
-FROM retail_master.store
-WHERE STORE_CLOSE_DATE IS NOT NULL
-
-)
-
-AND PROCESS_STATUS = &vprocess_ind
-AND COMMENTS IS NULL;
+SET
+    comments = 'Tienda Cerrada'
+WHERE
+    location_id IN (
+        SELECT
+            store_id
+        FROM
+            retail_master.store
+        WHERE
+            store_close_date IS NOT NULL
+    )
+    AND process_status = &vprocess_ind
+    AND comments IS NULL;
 
 COMMIT;
-
 
 
 -- =========================================
@@ -148,37 +129,35 @@ COMMIT;
 -- =========================================
 
 UPDATE retail_analysis.item_location_analysis
-SET COMMENTS = 'Sin STG RMSv16'
-
-WHERE (ITEM_ID, LOCATION_ID) IN (
-
-SELECT
-ilm.ITEM_ID,
-ilm.LOCATION_ID
-
-FROM retail_analysis.item_location_analysis ilm
-
-LEFT JOIN (
-
-SELECT *
-FROM retail_pipeline.stg_replication_data
-WHERE MESSAGE_ID IN (
-SELECT MAX(MESSAGE_ID)
-FROM retail_pipeline.stg_replication_data
-GROUP BY ITEM_ID, LOCATION_ID
-)
-
-) sra
-
-ON sra.ITEM_ID = ilm.ITEM_ID
-AND sra.LOCATION_ID = ilm.LOCATION_ID
-
-WHERE ilm.PROCESS_STATUS = &vprocess_ind
-AND COMMENTS IS NULL
-AND sra.ITEM_ID IS NULL
-
-)
-
-AND PROCESS_STATUS = &vprocess_ind;
+SET
+    comments = 'Sin STG RMSv16'
+WHERE
+    ( item_id, location_id ) IN (
+        SELECT
+            ilm.item_id, ilm.location_id
+        FROM
+            retail_analysis.item_location_analysis ilm
+            LEFT JOIN (
+                SELECT
+                    *
+                FROM
+                    retail_pipeline.stg_replication_data
+                WHERE
+                    message_id IN (
+                        SELECT
+                            MAX(message_id)
+                        FROM
+                            retail_pipeline.stg_replication_data
+                        GROUP BY
+                            item_id, location_id
+                    )
+            )                                      sra ON sra.item_id = ilm.item_id
+                     AND sra.location_id = ilm.location_id
+        WHERE
+                ilm.process_status = &vprocess_ind
+            AND comments IS NULL
+            AND sra.item_id IS NULL
+    )
+    AND process_status = &vprocess_ind;
 
 COMMIT;
